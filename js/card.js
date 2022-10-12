@@ -42,6 +42,6 @@ export default class Card {
       Bingo.checkWinner();
       Bingo.save();
     });
-    document.querySelector(".bingo__cards").appendChild(card);
+    document.querySelector(".bingo__board").appendChild(card);
   }
 }
