@@ -76,6 +76,7 @@ export default class Bingo {
     };
   }
 
+
   static save() {
     // 🔥🔥🔥 TODO 7
     // save the cards that are done to localstorage
@@ -92,6 +93,19 @@ export default class Bingo {
 
     // save a selection like [1, 7, 8] to localstorage item "bingo"
     // you might want to check out how JSON.stringify() works
+
+    let checkedCards = document.querySelectorAll(".bingo__card--done");
+
+    if (checkedCards.length === 0) {
+      localStorage.removeItem("bingo");
+    }
+
+    for (let i = 0; i < checkedCards.length; i++) {
+      console.log(checkedCards[i].dataset.number);
+      cardsWon.push(checkedCards[i].dataset.number);
+    }
+
+    localStorage.setItem("bingo", JSON.stringify(cardsWon));
   }
 
   static load() {
@@ -107,6 +121,13 @@ export default class Bingo {
       // JSON.parse() will convert the string [1, 7, 8] back to an array which you can loop
       // loop over the numbers 1, 7, 8 and mark those cards as done by adding the right CSS class
       // .bingo__card--done
+      
+      let cardsWon = JSON.parse(localStorage.getItem("bingo"));
+
+      for (let i = 0; i < cardsWon.length; i++) {
+          let card = document.querySelector(`[data-number="${cardsWon[i]}"]`);
+          card.classList.add("bingo__card--done");
+      }
     }
   }
 }

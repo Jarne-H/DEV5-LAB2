@@ -28,6 +28,8 @@ export default class Card {
     // don't forget to append the child to to DOM
     let card = document.createElement("div");
     card.dataset.number = counter + 1;
+    let id = card.dataset.number;
+    console.log(counter);
     card.classList.add("bingo__card");
     card.setAttribute("data-number", counter);
     card.setAttribute("id", `bingo__card${counter}`);
@@ -40,7 +42,7 @@ export default class Card {
     card.addEventListener("click", (e) => {
       this.markDone(card);
       Bingo.checkWinner();
-      Bingo.save();
+      Bingo.save(id);
     });
     document.querySelector(".bingo__board").appendChild(card);
   }
