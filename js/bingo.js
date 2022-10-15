@@ -55,7 +55,7 @@ export default class Bingo {
     // card.render();
     for(let i = 0; i < this.cards.length; i++) {
       let card = new Card(this.cards[i]);
-      card.render();
+      card.render(i + 1);
     }
   }
 
@@ -76,36 +76,34 @@ export default class Bingo {
     };
   }
 
-
-  static save() {
+  static save(card) {
     // 🔥🔥🔥 TODO 7
     // save the cards that are done to localstorage
     // you can simply save an array with the card numbers like [1, 6, 8]
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
     let cardsWon = [];
-    console.log("Saving bingo to localstorage");
+    console.log("saving bingo to localstorage");
+    // loop over all cards that are marked as done
+    // and add their number to the array
+    // .bingo__card--done
+    let cardsDone = document.querySelectorAll(".bingo__card--done");
+    for (let i = 0; i < cardsDone.length; i++) {
+    // and push the card number to the cardsWon array
+      cardsWon.push(cardsDone[i].dataset.number);
+    }
+    // save the array to localstorage
+    localStorage.setItem("bingo", JSON.stringify(cardsWon));
+    
     // let cards = document.querySelectorAll(".bingo__card--done");
 
     // if there are not done cards, remove localstorage
-    // if (cards.length === 0) {
-    // remove localstorage
-    // }
-
-    // save a selection like [1, 7, 8] to localstorage item "bingo"
-    // you might want to check out how JSON.stringify() works
-
-    let checkedCards = document.querySelectorAll(".bingo__card--done");
-
-    if (checkedCards.length === 0) {
+    if (cardsWon.length === 5) {
+      console.log("removing bingo from localstorage");
       localStorage.removeItem("bingo");
     }
 
-    for (let i = 0; i < checkedCards.length; i++) {
-      console.log(checkedCards[i].dataset.number);
-      cardsWon.push(checkedCards[i].dataset.number);
-    }
-
-    localStorage.setItem("bingo", JSON.stringify(cardsWon));
+    // save a selection like [1, 7, 8] to localstorage item "bingo"
+    // you might want to check out how JSON.stringify() works
   }
 
   static load() {
@@ -117,16 +115,14 @@ export default class Bingo {
 
     // check if localstorage item exists
     if (localStorage.getItem("bingo")) {
-      // let cardsWon = JSON.parse();
+      let cardsWon = JSON.parse(  localStorage.getItem("bingo")  );
       // JSON.parse() will convert the string [1, 7, 8] back to an array which you can loop
       // loop over the numbers 1, 7, 8 and mark those cards as done by adding the right CSS class
       // .bingo__card--done
-      
-      let cardsWon = JSON.parse(localStorage.getItem("bingo"));
-
       for (let i = 0; i < cardsWon.length; i++) {
-          let card = document.querySelector(`[data-number="${cardsWon[i]}"]`);
-          card.classList.add("bingo__card--done");
+        console.log(cardsWon);
+        let card = document.querySelector(`[data-number="${cardsWon[i]}"]`);
+        card.classList.add("bingo__card--done");
       }
     }
   }
